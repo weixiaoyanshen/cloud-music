@@ -13,11 +13,18 @@ function Recommend() {
   const recommendListJS = recommendList ? recommendList.toJS() : [];
 
   const dispatch = useDispatch();
+
   useEffect (() => {
-    dispatch(actionTypes.getBannerList());
-    dispatch(actionTypes.getRecommendList());
-    //eslint-disable-next-line
-  }, []);
+    if(!bannerList.size) {
+      dispatch(actionTypes.getBannerList());
+    }
+  }, [bannerList.size, dispatch]);
+
+  useEffect (() => {
+    if(!recommendList.size) {
+      dispatch(actionTypes.getRecommendList());
+    }
+  }, [recommendList.size, dispatch]);
 
   return (
     <div>
