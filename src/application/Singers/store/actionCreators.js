@@ -7,6 +7,16 @@ export const changeSingerList = data => ({
   data: fromJS(data)
 })
 
+export const changeAlpha = data => ({
+  type: actionTypes.CHANGE_ALPHA,
+  data
+})
+
+export const changeCategory = data => ({
+  type: actionTypes.CHANGE_CATEGORY,
+  data
+})
+
 export const changeListOffset = (data) => ({
   type: actionTypes.CHANGE_LIST_OFFSET,
   data
@@ -54,23 +64,30 @@ export const refreshMoreHotSingerList = () => (dispatch, getState) => {
 }
 
 //第一次加载对应类别的歌手
-export const getSingerList = (category, alpha) => dispatch => {
-  getSingerListRequest(category, alpha, 0).then(res => {
+export const getSingerList = () => (dispatch, getState) => {
+  const alpha = getState().getIn(['singers', 'alpha']);
+  const category = getState().getIn(['singers', 'category']);
+  const [type, area = ''] = category.split('.');
+  getSingerListRequest(type, area, alpha, 0).then(res => {
     dispatch(changeSingerList(res.artists));
     dispatch(changeEnterLoading(false));
     dispatch(changePullDownLoading(false));
-  }).catch(() => {
-    console.log('歌手数据获取失败');
-  });
+    dispatch(changeListOffset(res.artists.length));
+  })
 }
 
 // 加载更多歌手
-export const refreshMoreSingerList = (category, alpha) => (dispatch, getState) => {
-  const pageCount = getState().getIn(['singers', 'pageCount']);
+export const refreshMoreSingerList = () => (dispatch, getState) => {
+  const listOffset = getState().getIn(['singers', 'listOffset']);
   const singerList = getState().getIn(['singers', 'singerList']).toJS();
-  getSingerListRequest(category, alpha, pageCount).then(res => {
-    dispatch(changeSingerList([...singerList, res.artists]));
+  const alpha = getState().getIn(['singers', 'alpha']);
+  const category = getState().getIn(['singers', 'category']);
+  const [type, area = ''] = category.split('.');
+  getSingerListRequest(type, area, alpha, listOffset).then(res => {
+    const data = [...singerList, ...res.artists]
+    dispatch(changeSingerList(data));
     dispatch(changeEnterLoading(false));
     dispatch(changePullUpLoading(false));
+    dispatch(changeListOffset(data.length));
   })
 }

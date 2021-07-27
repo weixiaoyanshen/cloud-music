@@ -30,7 +30,7 @@ function Recommend() {
     <div>
       <Slider bannerList={bannerListJS}></Slider>
       <RecommendList recommendList={recommendListJS}></RecommendList>
-      { enterLoading ? <Loading></Loading> : null }
+      <Loading show={enterLoading}></Loading>
     </div>
   )
 }

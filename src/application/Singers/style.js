@@ -8,6 +8,8 @@ export const NavContainer = styled.div`
   width: 100%;
   padding: 5px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ListContainer = styled.div`
@@ -25,7 +27,7 @@ export const List = styled.div`
   flex-direction: column;
   overflow: hidden;
   .title {
-    margin:10px 0 10px 10px;
+    margin: 10px 0 10px 10px;
     color: ${style["font-color-desc"]};
     font-size: ${style["font-size-s"]};
   }

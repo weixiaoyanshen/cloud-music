@@ -30,9 +30,10 @@ const LoadingWrapper = styled.div`
   }
 `
 
-function Loading()  {
+function Loading(props)  {
+  const { show } = props;
   return (
-    <LoadingWrapper>
+    <LoadingWrapper style={show ? {display: ''} : {display: 'none'}}>
       <div></div>
       <div></div>
     </LoadingWrapper>
