@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
 import Slider from '../../components/slider';
 import Loading from '../../baseUI/loading';
 import RecommendList from '../../components/list';
 import * as actionTypes from './store/actionCreators';
 
-function Recommend() {
+function Recommend(props) {
   const bannerList = useSelector(state => state.getIn(['recommend', 'bannerList']));
   const recommendList = useSelector(state => state.getIn(['recommend', 'recommendList']));
   const enterLoading = useSelector(state => state.getIn(['recommend', 'enterLoading']));
@@ -31,6 +32,7 @@ function Recommend() {
       <Slider bannerList={bannerListJS}></Slider>
       <RecommendList recommendList={recommendListJS}></RecommendList>
       <Loading show={enterLoading}></Loading>
+      {renderRoutes(props.route.routes)}
     </div>
   )
 }
