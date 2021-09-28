@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
 import { getRankList } from './store/actionCreators';
-import { filterIndex, filterIdx } from '../../api/utils';
+import { filterIndex } from '../../api/utils';
 import { Container, List, ListItem, SongList, EnterLoading } from './style';
 import Scroll from '../../baseUI/scroll';
 import Loading from '../../baseUI/loading';
@@ -11,7 +11,6 @@ function Rank(props) {
   const rankList = useSelector(state => state.getIn(['rank', 'rankList']));
   const rankListJS = rankList.size ? rankList.toJS() : [];
   const loading = useSelector(state => state.getIn(['rank', 'loading']));
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,12 +21,8 @@ function Rank(props) {
   let officialList = rankListJS.slice(0, globalStartIndex);
   let globalList = rankListJS.slice(globalStartIndex);
 
-  const enterDetail = (name) => {
-    const idx = filterIdx(name);
-    if(idx === null) {
-      alert("暂无相关数据");
-      return;
-    } 
+  const enterDetail = (detail) => {
+    props.history.push(`/rank/${detail.id}`)
   }
 
   const renderRankList = (list, global) => {
@@ -36,7 +31,7 @@ function Rank(props) {
         {
           list.map((item) => {
             return(
-              <ListItem key={item.id} tracks={item.tracks} onClick={() => enterDetail(item.name)}>
+              <ListItem key={item.id} tracks={item.tracks} onClick={() => enterDetail(item)}>
                 <div className="img_wrapper">
                   <img src={item.coverImgUrl} alt=""/>
                   <div className="decorate"></div>

@@ -1,5 +1,6 @@
 import React, { memo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
 import LazyLoad, {forceCheck} from 'react-lazyload';
 import Horizon from '../../baseUI/horizon-item';
 import { categoryTypes, alphaTypes } from '../../api/config';
@@ -18,7 +19,7 @@ import {
   changeListOffset,
 } from './store/actionCreators';
 
-function Singers() {
+function Singers(props) {
   const singerList = useSelector(state => state.getIn(['singers', 'singerList']));
   const category = useSelector(state => state.getIn(['singers', 'category']));
   const alpha = useSelector(state => state.getIn(['singers', 'alpha']));
@@ -65,11 +66,15 @@ function Singers() {
     }
   }
 
+  const enterDetail = id => {
+    props.history.push (`/singers/${id}`);
+  }
+
   const renderSingerList = () => (
     <List>
       {
         singerListJS.map((item) => (
-          <ListItem key={item.id}>
+          <ListItem key={item.id} onClick={() => enterDetail(item.id)}>
             <div className="img_wrapper">
               <LazyLoad placeholder={<img width="100%" height="100%" src={require('./singer.png').default} alt="music"/>}>
                 <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music" />
@@ -110,6 +115,7 @@ function Singers() {
         </Scroll>
         <Loading show={enterLoading}></Loading>
       </ListContainer>
+      {renderRoutes(props.route.routes)}
     </div>
   )
 }

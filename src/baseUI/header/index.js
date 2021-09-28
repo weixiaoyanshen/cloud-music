@@ -12,7 +12,7 @@ const HeaderContainer = styled.div`
   display: flex;
   line-height: 40px;
   color: ${style['font-color-light']};
-  background: red;
+  box-sizing: border-box;
   .back {
     margin-right: 5px;
     font-size: 20px;
@@ -21,6 +21,30 @@ const HeaderContainer = styled.div`
   >h1 {
     font-size: ${style['font-size-l']};
     font-weight: 700;
+    width: 100%; 
+    overflow: hidden; 
+    position: relative; 
+    white-space: nowrap;
+  }
+  .text { 
+    position: absolute; 
+    animation: marquee 10s linear infinite; 
+  }
+  @keyframes marquee { 
+    from { 
+      left: 100%; 
+    } 
+    to { 
+      left: -100% 
+    } 
+  } 
+  @keyframes marquee { 
+    from { 
+      transform: translateX(100%); 
+    } 
+    to {
+      transform: translateX(-100%); 
+    } 
   }
 `
 
@@ -29,11 +53,7 @@ const Header = React.forwardRef((props, ref) => {
   return (
     <HeaderContainer ref={ref}>
       <i className="iconfont back" onClick={handleClick}>&#xe655;</i>
-      {
-        isMarquee 
-          ? <marquee><h1>{title}</h1></marquee>
-          : <h1>{title}</h1>
-      }
+      <h1 className={isMarquee ? 'text' : ''}>{title}</h1>
     </HeaderContainer>
   )
 })
