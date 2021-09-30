@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable';
 import {
   SET_CURRENT_SONG,
   SET_FULL_SCREEN,
@@ -11,7 +12,7 @@ import {
 
 export const changeCurrentSong = data => ({
   type: SET_CURRENT_SONG,
-  data
+  data: fromJS(data)
 });
 
 export const changeFullScreen = data => ({
@@ -26,12 +27,12 @@ export const changePlayingState = data => ({
 
 export const changeSequecePlayList  = data => ({
   type: SET_SEQUECE_PLAYLIST,
-  data
+  data: fromJS(data)
 });
 
 export const changePlayList = data => ({
   type: SET_PLAYLIST,
-  data
+  data: fromJS(data)
 });
 
 export const changePlayMode = data => ({

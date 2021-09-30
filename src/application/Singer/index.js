@@ -11,7 +11,7 @@ import { HEADER_HEIGHT } from '../../api/config';
 
 function Singer(props) {
   const artist = useSelector(state => state.getIn(['singer', 'artist']));
-  const songOfArtist = useSelector(state => state.getIn(['singer', 'songOfArtist']));
+  const songOfArtist = useSelector(state => state.getIn(['singer', 'songOfArtist'])).toJS();
   const loading = useSelector(state => state.getIn(['singer', 'loading']));
   const dispatch = useDispatch();
   const [showStatus, setShowStatus] = useState (true);

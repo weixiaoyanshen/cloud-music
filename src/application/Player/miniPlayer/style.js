@@ -1,4 +1,4 @@
-import styled, {keyframes} from'styled-components';
+import styled, { keyframes } from'styled-components';
 import style from '../../../assets/global-style';
 
 const rotate = keyframes`
@@ -42,7 +42,7 @@ export const MiniPlayerContainer = styled.div`
       img {
         border-radius: 50%;
         &.play {
-          animation: ${rotate} 10s infinite;
+          animation: ${rotate} linear 10s infinite;
           &.pause {
             animation-play-state: paused;
           }

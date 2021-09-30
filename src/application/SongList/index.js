@@ -1,12 +1,22 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { getCount, getName } from '../../api/utils';
 import { SongItem, SongList } from './style';
+import { 
+  changePlayList, changeCurrentIndex, changeSequecePlayList, changeCurrentSong
+} from './../../application/Player/store/actionCreators';
 
 const SongsList = React.forwardRef((props, refs) => {
   const { collectCount, showCollect, songs } = props;
   const totalCount = songs.length;
+
+  const dispatch = useDispatch();
+
   const selectItem = (e, index) => {
-    console.log(index)
+    dispatch(changePlayList(songs));
+    dispatch(changeSequecePlayList(songs));
+    dispatch(changeCurrentSong(songs[index]));
+    dispatch(changeCurrentIndex(index));
   }
 
   const songList = list => list.map((item, i) => (
@@ -33,7 +43,7 @@ const SongsList = React.forwardRef((props, refs) => {
   return (
     <SongList ref={refs} showBackground={props.showBackground}>
       <div className="first_line">
-        <div className="play_all" onClick={(e) => selectItem (e, 0)}>
+        <div className="play_all" onClick={(e) => selectItem(e, 0)}>
           <i className="iconfont">&#xe6e3;</i>
           <span>播放全部<span className="sum">(共{totalCount}首)</span></span>
         </div>

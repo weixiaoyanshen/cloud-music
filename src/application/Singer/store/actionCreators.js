@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable';
 import { getSingerInfoRequest } from '../../../api/request';
 import { CHANGE_ARTIST, CHANGE_SONGS_OF_ARTIST, CHANGE_ENTER_LOADING } from './constants';
 
@@ -8,7 +9,7 @@ const changeArtist = (data) => ({
 
 const changeSongs = (data) => ({
   type: CHANGE_SONGS_OF_ARTIST,
-  data
+  data: fromJS(data)
 })
 
 export const changeEnterLoading = (data) => ({
