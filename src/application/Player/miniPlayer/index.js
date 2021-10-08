@@ -10,6 +10,10 @@ function MiniPlayer(props) {
   } = props;
   const miniPlayerRef = useRef();
 
+  if(song.size === 0) {
+    return null;
+  }
+  
   return (
     <CSSTransition
       classNames="mini"
@@ -34,8 +38,8 @@ function MiniPlayer(props) {
           </div>
         </div>
         <div className="text">
-          <h2 className="name">{song.name}</h2>
-          <p className="desc">{getName(song.ar)}</p>
+          <h2 className="name">{song?.name}</h2>
+          <p className="desc">{getName(song?.ar)}</p>
         </div>
         <div className="control">
           <ProgressCircle radius={32} percent={percent}>

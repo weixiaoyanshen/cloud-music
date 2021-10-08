@@ -15,7 +15,6 @@ const SongsList = React.forwardRef((props, refs) => {
   const selectItem = (e, index) => {
     dispatch(changePlayList(songs));
     dispatch(changeSequecePlayList(songs));
-    dispatch(changeCurrentSong(songs[index]));
     dispatch(changeCurrentIndex(index));
   }
 

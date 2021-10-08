@@ -12,7 +12,7 @@ import {
 
 export const changeCurrentSong = data => ({
   type: SET_CURRENT_SONG,
-  data: fromJS(data)
+  data
 });
 
 export const changeFullScreen = data => ({
