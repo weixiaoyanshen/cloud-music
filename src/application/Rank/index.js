@@ -12,6 +12,7 @@ function Rank(props) {
   const rankListJS = rankList.size ? rankList.toJS() : [];
   const loading = useSelector(state => state.getIn(['rank', 'loading']));
   const dispatch = useDispatch();
+  const songsCount = useSelector(state => state.getIn(['player', 'playList']).size);
 
   useEffect(() => {
     dispatch(getRankList())
@@ -61,7 +62,7 @@ function Rank(props) {
   let displayStyle = loading ? {'display': 'none'}:  {'display': ''};
 
   return (
-    <Container>
+    <Container style={{bottom: songsCount > 0 ? '60px' : '0'}}>
       <Scroll>
         <div>
           <h1 className="official" style={displayStyle}>官方榜</h1>
@@ -78,4 +79,4 @@ function Rank(props) {
   )
 }
 
-export default React.memo(Rank)
+export default React.memo(Rank);

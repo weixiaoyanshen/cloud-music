@@ -5,6 +5,8 @@ import Slider from '../../components/slider';
 import Loading from '../../baseUI/loading';
 import RecommendList from '../../components/list';
 import * as actionTypes from './store/actionCreators';
+import Scroll from '../../baseUI/scroll';
+import { Content } from './style';
 
 function Recommend(props) {
   const bannerList = useSelector(state => state.getIn(['recommend', 'bannerList']));
@@ -12,6 +14,7 @@ function Recommend(props) {
   const enterLoading = useSelector(state => state.getIn(['recommend', 'enterLoading']));
   const bannerListJS = bannerList ? bannerList.toJS() : [];
   const recommendListJS = recommendList ? recommendList.toJS() : [];
+  const songsCount = useSelector(state => state.getIn(['player', 'playList']).size);
 
   const dispatch = useDispatch();
 
@@ -28,12 +31,16 @@ function Recommend(props) {
   }, [recommendList.size, dispatch]);
 
   return (
-    <div>
-      <Slider bannerList={bannerListJS}></Slider>
-      <RecommendList recommendList={recommendListJS}></RecommendList>
-      <Loading show={enterLoading}></Loading>
+    <Content style={{bottom: songsCount > 0 ? '60px' : '0'}}>
+      <Scroll>
+        <div>
+          <Slider bannerList={bannerListJS}></Slider>
+          <RecommendList recommendList={recommendListJS}></RecommendList>
+          <Loading show={enterLoading}></Loading>
+      </div>
+      </Scroll>
       {renderRoutes(props.route.routes)}
-    </div>
+    </Content>
   )
 }
 

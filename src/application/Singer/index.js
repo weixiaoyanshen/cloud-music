@@ -8,6 +8,7 @@ import Scroll from '../../baseUI/scroll';
 import Loading from '../../baseUI/loading';
 import SongsList from '../SongList';
 import { HEADER_HEIGHT } from '../../api/config';
+import MusicNote from '../../baseUI/MusicNote';
 
 function Singer(props) {
   const artist = useSelector(state => state.getIn(['singer', 'artist']));
@@ -15,6 +16,8 @@ function Singer(props) {
   const loading = useSelector(state => state.getIn(['singer', 'loading']));
   const dispatch = useDispatch();
   const [showStatus, setShowStatus] = useState (true);
+
+  const musicNoteRef = useRef();
 
   const collectButton = useRef();
   const imageWrapper = useRef();
@@ -84,6 +87,10 @@ function Singer(props) {
     }
   }, [])
 
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y})
+  }
+
   return (
     <CSSTransition
       in={showStatus}
@@ -108,10 +115,12 @@ function Singer(props) {
             <SongsList
               songs={songOfArtist}
               showCollect={false}
+              musicAnimation={musicAnimation}
             ></SongsList>
           </Scroll>
         </SongListWrapper>
         <Loading show={loading}></Loading>
+        <MusicNote ref={musicNoteRef} />
       </Container>
     </CSSTransition>
   )

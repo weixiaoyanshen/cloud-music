@@ -1,9 +1,11 @@
-import React, { memo, useState, useRef, useEffect } from 'react';
-import { useSelector ,useDispatch } from 'react-redux';
+import React, { memo, useState, useRef, useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { playMode } from '../../api/config';
 import { findIndex, getSongUrl, isEmptyObject, shuffle } from '../../api/utils';
+import Toast from '../../baseUI/Toast';
 import MiniPlayer from './miniPlayer';
 import NormalPlayer from './normalPlayer';
+import PlayList from './playList';
 import {
   changeCurrentSong,
   changeFullScreen,
@@ -15,41 +17,49 @@ import {
   changeShowPlayList
 } from './store/actionCreators'
 
-function Player(props) {
+function Player() {
   const fullScreen = useSelector(state => state.getIn(['player', 'fullScreen']));
   const currentSong = useSelector(state => state.getIn(['player', 'currentSong']));
   const playing = useSelector(state => state.getIn(['player', 'playing']));
-  const sequecePlayList = useSelector(state => state.getIn(['player', 'sequecePlayList']));
+  const sequecePlayList = useSelector(state => state.getIn(['player', 'sequecePlayList'])).toJS();
   const playList = useSelector(state => state.getIn(['player', 'playList'])).toJS();
   const mode = useSelector(state => state.getIn(['player', 'mode']));
   const currentIndex = useSelector(state => state.getIn(['player', 'currentIndex']));
-  const showPlayList = useSelector(state => state.getIn(['player', 'showPlayList']));
   //目前播放时间
   const [currentTime, setCurrentTime] = useState(0);
   //歌曲总时长
   const [duration, setDuration] = useState(0);
   //歌曲播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
-
   //记录当前的歌曲，以便于下次重渲染时比对是否是一首歌
   const [preSong, setPreSong] = useState({});
 
   const audioRef = useRef();
   const dispatch = useDispatch();
 
+  const [modeText, setModeText] = useState('');
+  const toastRef = useRef();
+  const songReady = useRef(true);
+
   useEffect(() => {
     if(!playList.length || 
       currentIndex === -1 || 
       !playList[currentIndex] ||
-       playList[currentIndex].id === preSong.id
+      playList[currentIndex].id === preSong.id ||
+      !songReady.current
     ) { 
       return;
     };
     let current = playList[currentIndex];
     dispatch(changeCurrentSong(current));
     setPreSong(current);
+    songReady.current = false;
     audioRef.current.src = getSongUrl(current.id);
-    audioRef.current.play();
+    setTimeout(() => {
+      audioRef.current.play().then(() => {
+        songReady.current = true;
+      });
+    }, 0)
     dispatch(changePlayingState(true)); // 播放状态
     setCurrentTime(0); //从头开始播放
     setDuration((current.dt / 1000) | 0); // 时长
@@ -122,20 +132,24 @@ function Player(props) {
     let newMode = (mode + 1) % 3;
     if(newMode === 0) {
       // 顺序模式
-      dispatch(changeSequecePlayList(sequecePlayList));
+      dispatch(changePlayList(sequecePlayList));
       let index = findIndex(currentSong, sequecePlayList);
       dispatch(changeCurrentIndex(index));
+      setModeText('顺序循环');
     } else if(newMode === 1) {
       // 单曲循环
       dispatch(changePlayList(sequecePlayList));
+      setModeText('单曲循环');
     } else if(newMode === 2) {
       // 随机播放
       let newList = shuffle(sequecePlayList);
-      let index = findIndex(currentSong, sequecePlayList);
+      let index = findIndex(currentSong, newList);
       dispatch(changePlayList(newList));
       dispatch(changeCurrentIndex(index));
+      setModeText('随机播放');
     }
     dispatch(changePlayMode(newMode));
+    toastRef.current.show();
   }
 
   const handleEnd = () => {
@@ -144,6 +158,15 @@ function Player(props) {
     } else {
       handleNext();
     }
+  }
+
+  const handleError = () => {
+    songReady.current = true;
+    alert ('播放出错');
+  };
+
+  const togglePlayList = (status) => {
+    dispatch(changeShowPlayList(status))
   }
 
   return (
@@ -157,6 +180,7 @@ function Player(props) {
             percent={percent}
             clickPlaying={clickPlaying}
             toggleFullScreen={toggleFullScreen}
+            togglePlayList={togglePlayList}
           />
         )
       }
@@ -176,6 +200,7 @@ function Player(props) {
             onProgressChange={onProgressChange}
             handlePrev={handlePrev}
             handleNext={handleNext}
+            togglePlayList={togglePlayList}
           />
         )
       }
@@ -183,7 +208,10 @@ function Player(props) {
         ref={audioRef}
         onTimeUpdate={updateTime}
         onEnded={handleEnd}
+        onError={handleError}
       ></audio>
+      <PlayList />
+      <Toast text={modeText} ref={toastRef} />
     </div>
   )
 }

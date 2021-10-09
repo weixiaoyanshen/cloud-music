@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { getCount, getName } from '../../api/utils';
 import { SongItem, SongList } from './style';
 import { 
-  changePlayList, changeCurrentIndex, changeSequecePlayList, changeCurrentSong
+  changePlayList, changeCurrentIndex, changeSequecePlayList
 } from './../../application/Player/store/actionCreators';
 
 const SongsList = React.forwardRef((props, refs) => {
-  const { collectCount, showCollect, songs } = props;
+  const { collectCount, showCollect, songs, musicAnimation } = props;
   const totalCount = songs.length;
 
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const SongsList = React.forwardRef((props, refs) => {
     dispatch(changePlayList(songs));
     dispatch(changeSequecePlayList(songs));
     dispatch(changeCurrentIndex(index));
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }
 
   const songList = list => list.map((item, i) => (

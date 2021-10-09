@@ -9,6 +9,7 @@ import { getAlbumDetail, changeEnterLoading } from './store/actionCreators';
 import { getCount, getName, isEmptyObject } from '../../api/utils';
 import style from '../../assets/global-style';
 import SongsList from '../SongList';
+import MusicNote from '../../baseUI/MusicNote';
 
 export const HEADER_HEIGHT = 45;
 
@@ -21,6 +22,8 @@ function Album(props) {
   const [isMarquee, setIsMarquee] = useState(false);
   const headerEl = useRef();
   const dispatch = useDispatch();
+
+  const musicNoteRef = useRef();
 
   useEffect(() => {
     dispatch(changeEnterLoading(true));
@@ -48,6 +51,10 @@ function Album(props) {
       setIsMarquee(false);
     }
   }, [currentAlbum])
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y})
+  }
 
   const renderTopDesc = () => (
     <TopDesc background={currentAlbum.coverImgUrl}>
@@ -98,8 +105,10 @@ function Album(props) {
   const renderSongList = () => (
     <SongsList
       showCollect={true}
+      showBackground={true}
       collectCount={currentAlbum.subscribedCount}
       songs={currentAlbum.tracks}
+      musicAnimation={musicAnimation}
     ></SongsList>
   )
 
@@ -132,7 +141,8 @@ function Album(props) {
             )
             : null
         }
-      <Loading show={enterLoading}></Loading>
+        <Loading show={enterLoading}></Loading>
+        <MusicNote ref={musicNoteRef} />
       </Container>
     </CSSTransition>
   )
