@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef, useEffect, useMemo } from 'react';
+import React, { memo, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { playMode } from '../../api/config';
 import { findIndex, getSongUrl, isEmptyObject, shuffle } from '../../api/utils';
@@ -10,7 +10,6 @@ import {
   changeCurrentSong,
   changeFullScreen,
   changePlayingState,
-  changeSequecePlayList,
   changePlayList,
   changePlayMode,
   changeCurrentIndex,

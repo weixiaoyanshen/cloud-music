@@ -7,6 +7,7 @@ import RecommendList from '../../components/list';
 import * as actionTypes from './store/actionCreators';
 import Scroll from '../../baseUI/scroll';
 import { Content } from './style';
+import { forceCheck } from 'react-lazyload';
 
 function Recommend(props) {
   const bannerList = useSelector(state => state.getIn(['recommend', 'bannerList']));
@@ -32,7 +33,7 @@ function Recommend(props) {
 
   return (
     <Content style={{bottom: songsCount > 0 ? '60px' : '0'}}>
-      <Scroll>
+      <Scroll className="list" onScroll={forceCheck}>
         <div>
           <Slider bannerList={bannerListJS}></Slider>
           <RecommendList recommendList={recommendListJS}></RecommendList>

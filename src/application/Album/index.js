@@ -1,12 +1,12 @@
 import React, { useState, memo, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
-import { Container, TopDesc, Menu, SongList, SongItem } from './style';
+import { Container, TopDesc, Menu } from './style';
 import Header from '../../baseUI/header';
 import Scroll from '../../baseUI/scroll';
 import Loading from '../../baseUI/loading';
 import { getAlbumDetail, changeEnterLoading } from './store/actionCreators';
-import { getCount, getName, isEmptyObject } from '../../api/utils';
+import { isEmptyObject } from '../../api/utils';
 import style from '../../assets/global-style';
 import SongsList from '../SongList';
 import MusicNote from '../../baseUI/MusicNote';

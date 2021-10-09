@@ -36,7 +36,7 @@ const SongsList = React.forwardRef((props, refs) => {
   const collect = count => (
     <div className="add_list">
       <i className="iconfont">&#xe62d;</i>
-      <span>收藏({getCount(collectCount)}万)</span>
+      <span>收藏({getCount(collectCount)})</span>
     </div>
   )
 
